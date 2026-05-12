@@ -61,18 +61,53 @@ so clearly instead of failing silently.
 
 ## Install
 
-```bash
-# One-liner (clones to ~/.local/share/guardrail and symlinks bin)
-curl -fsSL https://raw.githubusercontent.com/nyongesa637/guardrail/main/install.sh | bash
+Three paths — pick whichever fits.
 
-# Or manually
-git clone https://github.com/nyongesa637/guardrail.git ~/guardrail
-ln -s ~/guardrail/bin/guardrail ~/.local/bin/guardrail
+### 1. Docker (zero install)
+
+The published image at `ghcr.io/nyongesa637/guardrail:latest`
+bundles bash, git, gh, and the toolkit. Mount your repo and run:
+
+```bash
+docker run --rm -v "$PWD:/work" -w /work \
+  ghcr.io/nyongesa637/guardrail:latest init
+
+# Configure GitHub (needs a token):
+docker run --rm -v "$PWD:/work" -w /work \
+  -e GH_TOKEN="$(gh auth token)" \
+  ghcr.io/nyongesa637/guardrail:latest protect
 ```
 
-Dependencies (all standard): `bash`, `git`, `gh`. Optional:
-`envsubst` (cleaner template rendering; falls back to `sed`), and
-Python 3.10+ + `mcp` package if you want the MCP server.
+Tags follow the repo's [SemVer releases](https://github.com/nyongesa637/guardrail/releases):
+`latest`, `v0.1.0`, `0.1`, `0`. Built for `linux/amd64` and
+`linux/arm64`.
+
+### 2. Curl one-liner (clones to `~/.local/share/guardrail`)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nyongesa637/guardrail/main/install.sh | bash
+```
+
+The script clones the repo, symlinks `bin/guardrail` to
+`~/.local/bin/guardrail`, and (if `~/.claude/` or `~/.cursor/`
+exists) symlinks the agent integrations.
+
+### 3. Release tarball
+
+```bash
+LATEST=$(gh release view --repo nyongesa637/guardrail --json tagName --jq '.tagName')
+curl -fsSL "https://github.com/nyongesa637/guardrail/releases/download/${LATEST}/guardrail-${LATEST#v}.tar.gz" \
+  | tar -xz -C ~/.local/share/
+ln -sf "$HOME/.local/share/guardrail-${LATEST#v}/bin/guardrail" "$HOME/.local/bin/guardrail"
+```
+
+Each release ships a `guardrail-<ver>.tar.gz` and a `.sha256`.
+
+### Dependencies
+
+All standard: `bash`, `git`, `gh`. Optional: `envsubst` (cleaner
+template rendering; falls back to `sed`), and Python 3.10+ +
+`mcp` package if you want the MCP server.
 
 ## Use
 

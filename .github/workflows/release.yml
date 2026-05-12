@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build tarball and publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute version
+        id: ver
+        run: |
+          ver="${GITHUB_REF#refs/tags/v}"
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Build tarball
+        env:
+          VER: ${{ steps.ver.outputs.version }}
+        run: |
+          set -e
+          stage="guardrail-$VER"
+          mkdir -p "$stage"
+          # Ship the toolkit + agent integrations + docs, but NOT the .git
+          # tree, the CI workflows, or anything host-specific.
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.guardrail' \
+            --exclude='Dockerfile' \
+            --exclude='.dockerignore' \
+            --exclude="$stage" \
+            ./ "$stage/"
+          tar -czf "$stage.tar.gz" "$stage"
+          sha256sum "$stage.tar.gz" > "$stage.tar.gz.sha256"
+          echo "--- tarball contents ---"
+          tar -tzf "$stage.tar.gz" | head -30
+          echo "--- checksum ---"
+          cat "$stage.tar.gz.sha256"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VER: ${{ steps.ver.outputs.version }}
+        run: |
+          set -e
+          if gh release view "v$VER" >/dev/null 2>&1; then
+            echo "::notice::Release v$VER already exists; uploading assets only."
+            gh release upload "v$VER" \
+              "guardrail-$VER.tar.gz" "guardrail-$VER.tar.gz.sha256" \
+              --clobber
+          else
+            gh release create "v$VER" \
+              --title "v$VER" \
+              --generate-notes \
+              "guardrail-$VER.tar.gz" \
+              "guardrail-$VER.tar.gz.sha256"
+          fi

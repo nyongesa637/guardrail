@@ -1,0 +1,28 @@
+# Don't ship the .git history inside the image
+.git/
+.github/
+.gitignore
+.dockerignore
+.guardrail/
+docs/
+
+# Editor / OS detritus
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Local secrets and caches
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.pyc
+*.pyo
+.mypy_cache/
+.pytest_cache/
+.venv/
+node_modules/
+build/
+dist/
