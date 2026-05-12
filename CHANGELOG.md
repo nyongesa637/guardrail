@@ -6,16 +6,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-05-12
+
 ### Added
-- Initial guardrail repository governance via the **guardrail**
-  pattern: AGPL-3.0 license, NOTICE, TRADEMARK policy, Code of
-  Conduct, CONTRIBUTING (DCO), SECURITY (responsible disclosure),
-  CODEOWNERS.
-- CI: DCO sign-off enforcement, Conventional Commits title check,
-  gitleaks secret scan, auto-merge for green Dependabot PRs.
-- Dependabot for `pip` / `npm` / `github-actions` (uncomment in
-  `.github/dependabot.yml` for the ecosystems this project actually
-  uses).
+- **Bash CLI** (`bin/guardrail`) with six commands: `init`, `apply`,
+  `audit`, `protect`, `signing`, `templates`. No runtime deps beyond
+  `bash`, `git`, and `gh`.
+- **18 templates** in `templates/` covering legal (LICENSE x3, NOTICE,
+  TRADEMARK), community (CODE_OF_CONDUCT, CONTRIBUTING, SECURITY,
+  CODEOWNERS, CHANGELOG), and CI (DCO, lint, auto-merge workflows,
+  Dependabot, PR + 4 issue templates, FUNDING).
+- **Agent integrations**: Claude Code slash commands
+  (`.claude/commands/`), Cursor rules (`.cursor/rules/`), and Codex
+  doctrine via `AGENTS.md`.
+- **Optional MCP server** (`mcp/server.py`) exposing `apply`,
+  `audit`, `protect`, `signing_setup`, `list_templates` as MCP tools.
+- **Production-tested fixes** baked in:
+  - DCO workflow skips merge commits and Bot-authored PRs.
+  - Lint workflow has Bot author bypass for Dependabot's
+    double-scope titles.
+  - Lint workflow declares `pull-requests: read` for private-repo
+    gitleaks support.
+  - Auto-merge workflow handles both protected (native auto-merge)
+    and unprotected (polling fallback) main branches.
+- **`install.sh` one-liner** that clones, symlinks the CLI, and
+  wires up agent integrations when matching dot-dirs exist.
+- **Docker image** published to `ghcr.io/nyongesa637/guardrail`
+  (linux/amd64, linux/arm64). `latest` and per-tag SemVer.
+- **GitHub Release** with a versioned tarball + sha256.
+
+### Notes
+- `guardrail protect` degrades gracefully on free private repos —
+  it applies Actions allowlist + read-only workflow permissions +
+  Dependabot but flags branch protection and secret scanning as
+  unavailable on that plan.
 
 ## Release process
 
