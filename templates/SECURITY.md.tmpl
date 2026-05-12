@@ -1,0 +1,62 @@
+# Security Policy
+
+## Supported versions
+
+${GR_PROJECT} is pre-1.0 and currently ships a single supported branch
+(`main`). Security fixes land on `main` and are tagged.
+
+| Version | Supported          |
+| ------- | ------------------ |
+| `main`  | :white_check_mark: |
+| < `main`| :x:                |
+
+## Reporting a vulnerability
+
+**Please do not open a public GitHub issue** for security problems.
+
+Two channels — pick whichever you prefer:
+
+1. **GitHub Private Vulnerability Reporting** (preferred, where available)
+   <https://github.com/${GR_GH_USER}/${GR_PROJECT_LOWER}/security/advisories/new>
+
+2. **Email**
+   Replace this paragraph with a real security contact address. Many
+   maintainers create a dedicated `security@<your-domain>` mailbox or
+   publish a PGP key fingerprint in the README.
+
+Include in your report:
+
+- A description of the issue and its impact.
+- The exact version / commit SHA of ${GR_PROJECT} you tested against.
+- Reproduction steps or a proof of concept (a private gist is fine).
+- Your name / handle for the credit line, OR a clear request for
+  anonymous reporting — we honour both.
+
+## Our commitments
+
+- **Acknowledgement** within 72 hours.
+- **First-pass triage** within 7 days, with a severity rating
+  (CVSS 3.1).
+- **Coordinated disclosure**: we will publish a GitHub Security
+  Advisory and a tagged release after the fix ships.
+
+## Scope
+
+In scope:
+
+- Anything in this repository's `main` branch.
+- Cryptographic surface, authentication, and authorisation.
+- Anything that handles end-user data.
+
+Out of scope:
+
+- Issues that require a malicious local user with write access to the
+  user's machine.
+- Denial-of-service against a local development build.
+- Findings in third-party dependencies that have not been disclosed
+  upstream — please report those upstream first.
+
+## Hall of thanks
+
+Coordinated-disclosure reporters who consent to credit will be listed
+at the bottom of each release's GitHub Security Advisory.

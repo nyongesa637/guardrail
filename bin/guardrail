@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# guardrail — drop a governance/security/CI pattern into any repo.
+#
+# A single bash CLI that:
+#   1. Applies a set of vetted markdown + workflow templates to a repo
+#   2. Configures the corresponding GitHub repo settings via gh API
+#   3. Sets up local SSH commit signing
+#
+# No runtime deps beyond `bash`, `git`, and `gh` (and `envsubst` if you
+# want fancy template substitution; falls back to `sed`).
+
+set -euo pipefail
+
+# Resolve our own home regardless of how we were invoked.
+SELF="${BASH_SOURCE[0]}"
+while [ -L "$SELF" ]; do
+  SELF="$(readlink "$SELF")"
+done
+GUARDRAIL_HOME="$(cd "$(dirname "$SELF")/.." && pwd)"
+export GUARDRAIL_HOME
+
+# shellcheck source=../lib/common.sh
+source "$GUARDRAIL_HOME/lib/common.sh"
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+  init)
+    exec bash "$GUARDRAIL_HOME/lib/apply.sh" --interactive "$@"
+    ;;
+  apply)
+    exec bash "$GUARDRAIL_HOME/lib/apply.sh" "$@"
+    ;;
+  audit|diff|check)
+    exec bash "$GUARDRAIL_HOME/lib/audit.sh" "$@"
+    ;;
+  protect)
+    exec bash "$GUARDRAIL_HOME/lib/protect.sh" "$@"
+    ;;
+  signing)
+    exec bash "$GUARDRAIL_HOME/lib/signing.sh" "$@"
+    ;;
+  mcp)
+    exec bash "$GUARDRAIL_HOME/lib/mcp.sh" "$@"
+    ;;
+  templates|list)
+    exec bash "$GUARDRAIL_HOME/lib/list.sh" "$@"
+    ;;
+  version|--version|-v)
+    echo "guardrail 0.1.0"
+    ;;
+  help|--help|-h|"")
+    cmd_help
+    ;;
+  *)
+    die "unknown command: $cmd  (try 'guardrail help')"
+    ;;
+esac

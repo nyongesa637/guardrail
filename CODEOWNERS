@@ -1,0 +1,29 @@
+# guardrail code owners
+#
+# Reviewers listed here are automatically requested when a PR touches
+# the matching paths. The default catch-all is the project lead.
+#
+# Order matters: later, more specific patterns override earlier ones.
+
+# --- default owner ---
+*                                       @nyongesa637
+
+# --- legal / governance (require lead review) ---
+/LICENSE                                @nyongesa637
+/NOTICE                                 @nyongesa637
+/TRADEMARK.md                           @nyongesa637
+/CODE_OF_CONDUCT.md                     @nyongesa637
+/CONTRIBUTING.md                        @nyongesa637
+/SECURITY.md                            @nyongesa637
+/CODEOWNERS                             @nyongesa637
+
+# --- CI / build / release ---
+/.github/                               @nyongesa637
+
+# --- Add project-specific security-critical paths below ---
+# Example for a Python backend:
+#   /server/auth.py                     @nyongesa637
+#   /server/database.py                 @nyongesa637
+# Example for a Node frontend:
+#   /src/lib/api.ts                     @nyongesa637
+#   /src/pages/                         @nyongesa637

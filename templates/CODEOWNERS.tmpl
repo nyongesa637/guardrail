@@ -1,0 +1,29 @@
+# ${GR_PROJECT} code owners
+#
+# Reviewers listed here are automatically requested when a PR touches
+# the matching paths. The default catch-all is the project lead.
+#
+# Order matters: later, more specific patterns override earlier ones.
+
+# --- default owner ---
+*                                       @${GR_GH_USER}
+
+# --- legal / governance (require lead review) ---
+/LICENSE                                @${GR_GH_USER}
+/NOTICE                                 @${GR_GH_USER}
+/TRADEMARK.md                           @${GR_GH_USER}
+/CODE_OF_CONDUCT.md                     @${GR_GH_USER}
+/CONTRIBUTING.md                        @${GR_GH_USER}
+/SECURITY.md                            @${GR_GH_USER}
+/CODEOWNERS                             @${GR_GH_USER}
+
+# --- CI / build / release ---
+/.github/                               @${GR_GH_USER}
+
+# --- Add project-specific security-critical paths below ---
+# Example for a Python backend:
+#   /server/auth.py                     @${GR_GH_USER}
+#   /server/database.py                 @${GR_GH_USER}
+# Example for a Node frontend:
+#   /src/lib/api.ts                     @${GR_GH_USER}
+#   /src/pages/                         @${GR_GH_USER}

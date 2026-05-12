@@ -1,0 +1,36 @@
+# Changelog
+
+All notable changes to guardrail are documented here.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Initial guardrail repository governance via the **guardrail**
+  pattern: AGPL-3.0 license, NOTICE, TRADEMARK policy, Code of
+  Conduct, CONTRIBUTING (DCO), SECURITY (responsible disclosure),
+  CODEOWNERS.
+- CI: DCO sign-off enforcement, Conventional Commits title check,
+  gitleaks secret scan, auto-merge for green Dependabot PRs.
+- Dependabot for `pip` / `npm` / `github-actions` (uncomment in
+  `.github/dependabot.yml` for the ecosystems this project actually
+  uses).
+
+## Release process
+
+When cutting a release:
+
+1. Move everything in `[Unreleased]` under a new `[X.Y.Z] — YYYY-MM-DD`
+   heading.
+2. Tag with `vX.Y.Z` on a signed annotated tag
+   (`git tag -s -a vX.Y.Z -m "Release X.Y.Z"`).
+3. Push the tag — a GitHub Release is created and a Security Advisory
+   draft is opened for anything in the **Security** section.
+4. Open a new empty `[Unreleased]` section on `main`.
+
+Version bumps follow SemVer strictly. Define your project's
+MAJOR-breaking surfaces (API contracts, data formats, on-disk
+schemas) in this file once the project stabilises.
+
+[Unreleased]: https://github.com/nyongesa637/guardrail/compare/HEAD...HEAD

@@ -1,0 +1,35 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python (for the optional MCP server)
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.venv/
+build/
+dist/
+
+# Local secrets
+.env
+.env.local
+.env.*.local
+
+# Per-target-repo state (when guardrail is used IN this repo, .guardrail/config holds the rendered vars)
+# We keep .guardrail/config tracked so contributors can reproduce.
+!.guardrail/
+
+# Agent workspaces (not tracked here)
+.codex/
+
+# Build artifacts
+*.log

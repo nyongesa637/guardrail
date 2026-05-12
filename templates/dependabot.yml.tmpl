@@ -1,0 +1,66 @@
+version: 2
+
+# Uncomment the ecosystems that apply to ${GR_PROJECT}. Each "directory"
+# is the path (relative to the repo root) of a manifest file's parent
+# directory.
+
+updates:
+  # --- GitHub Actions (always recommended) ---
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels: [dependencies, ci]
+    commit-message:
+      prefix: "ci(deps)"
+      include: scope
+
+  # --- Python (pip / requirements.txt) ---
+  # - package-ecosystem: pip
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #     day: monday
+  #     time: "06:00"
+  #   open-pull-requests-limit: 5
+  #   labels: [dependencies, backend]
+  #   commit-message:
+  #     prefix: "chore(deps)"
+  #     include: scope
+  #   groups:
+  #     python-minor:
+  #       patterns: ["*"]
+  #       update-types: [minor, patch]
+
+  # --- Node / npm ---
+  # - package-ecosystem: npm
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #     day: monday
+  #     time: "06:00"
+  #   open-pull-requests-limit: 5
+  #   labels: [dependencies, frontend]
+  #   commit-message:
+  #     prefix: "chore(deps)"
+  #     include: scope
+  #   groups:
+  #     other-minor:
+  #       patterns: ["*"]
+  #       update-types: [minor, patch]
+
+  # --- Docker base images ---
+  # - package-ecosystem: docker
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #     day: monday
+  #     time: "06:00"
+  #   open-pull-requests-limit: 3
+  #   labels: [dependencies, docker]
+  #   commit-message:
+  #     prefix: "chore(deps)"
+  #     include: scope

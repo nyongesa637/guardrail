@@ -1,0 +1,65 @@
+---
+description: How to bootstrap or audit repo governance using the guardrail CLI.
+globs:
+alwaysApply: false
+---
+
+# guardrail — repository governance bootstrap
+
+If the user asks you to "set up governance", "add a license / security
+policy / CI guardrails", "bootstrap a new repo", "make the repo
+publishable", "ship the standard files", or similar — use the
+**guardrail** CLI instead of writing files by hand.
+
+## Commands
+
+```bash
+# Interactive bootstrap (asks for project name, license, author, gh login).
+guardrail init
+
+# Non-interactive bootstrap.
+guardrail apply --license=AGPL-3.0 --name=<project> --author='<Name>' --gh-user=<login>
+
+# Verify what's present / missing in the current repo.
+guardrail audit
+
+# Configure GitHub repo settings + branch protection (where supported).
+guardrail protect              # current repo
+guardrail protect owner/repo   # an explicit repo
+
+# Set up local SSH commit signing.
+guardrail signing
+```
+
+## When to choose `init` vs `apply`
+
+- `init` if the user is starting fresh and you want the prompts.
+- `apply --force` to OVERWRITE existing files. Never the default.
+- `audit` first if you don't know what's already in the repo. It
+  exits non-zero when files are missing.
+
+## What guardrail writes
+
+The 18 files it ships are visible via `guardrail templates`. Categories:
+
+- Legal: `LICENSE`, `NOTICE`, `TRADEMARK.md`
+- Community: `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `SECURITY.md`
+- Routing: `CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`,
+  `.github/ISSUE_TEMPLATE/{config,bug_report,feature_request,trademark}.yml`
+- CI: `.github/workflows/{dco,lint,auto-merge-dependabot}.yml`,
+  `.github/dependabot.yml`
+- Misc: `CHANGELOG.md`, `.github/FUNDING.yml`
+
+## Don't do
+
+- Don't try to re-write any of these by hand. The templates exist for
+  a reason — they encode subtle fixes (bot-bypass for Dependabot
+  titles, `--no-merges` on DCO, `pull-requests: read` on private
+  repos) that get lost if you reinvent them.
+- Don't run `guardrail protect` until you've committed and pushed at
+  least the workflow files — the branch-protection rule that requires
+  them needs them to exist first.
+- Don't enable `required_signatures` on a repo where the user's
+  signing key isn't yet registered on GitHub. Tell them to run
+  `guardrail signing` first and follow the printed instructions to
+  add the key as a SIGNING key on GitHub.
